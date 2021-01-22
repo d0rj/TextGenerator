@@ -3,6 +3,7 @@ import re
 from typing import List
 
 
+WORD_REGEX = r'X\[(\w*)\]'
 morph = pymorphy2.MorphAnalyzer()
 
 
@@ -32,25 +33,21 @@ def process_word(word: str, form: str) -> str:
 		return morph.parse(word)[0].inflect({form}).word
 
 
-def process_template(template: List[str], word: str) -> List[str]:
-	result: List[str] = []
-	for line in template:
-		parsed = [m for m in re.finditer(r'X\[(\w*)\]', line)]
+def process_template(template: str, word: str) -> str:
+	parsed = [m for m in re.finditer(WORD_REGEX, template)]
 
-		matches = [p.group() for p in parsed]
-		forms = [p.group(1) for p in parsed]
-		
-		processed: str = line
-		for index, match in enumerate(matches, start=0):
-			processed = processed.replace(match, process_word(word, forms[index]), 1)
-
-		result.append(processed)
+	matches = [p.group() for p in parsed]
+	forms = [p.group(1) for p in parsed]
+	
+	result = template
+	for index, match in enumerate(matches, start=0):
+		result = result.replace(match, process_word(word, forms[index]), 1)
 
 	return result
 
 
 def main() -> None:
-	print(''.join(process_template(load_template('./templates/zvonov.txt'), 'коммунизм')))
+	print(process_template(''.join(load_template('./templates/zvonov.txt')), 'коммунизм'))
 
 
 if __name__ == '__main__':

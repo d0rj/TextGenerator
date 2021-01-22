@@ -19,7 +19,7 @@ def main() -> None:
 
 	args = parser.parse_args()
 
-	engine = TemplateEngine({'X': args.X})
+	engine = TemplateEngine({'X': args.X, 'Y': 'монархизм'})
 	print(engine.process_template(''.join(load_template(args.file))))
 
 

@@ -1,4 +1,3 @@
-import pymorphy2
 import re
 import argparse
 import pathlib

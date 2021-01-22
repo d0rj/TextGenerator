@@ -1,33 +1,39 @@
 import re
-from typing import List, Dict
+from typing import Dict
 from src.word_morpher import WordMorpher
 
 
 class TemplateEngine:
 	variables: Dict[str, str] = {}
+	ignore_unknown = False
 	
 	__morpher = WordMorpher()
 	__vars_regexes: Dict[str, str] = {}
 	__general_regex = r'([A-Z]+)\[(\w*)\]'
 
 	
-	def __init__(self, variables: Dict[str, str]) -> None:
+	def __init__(self, variables: Dict[str, str], ignore_unknown: bool = False) -> None:
 		self.variables = { k.upper() : v for k, v in variables.items() }
+		self.ignore_unknown = ignore_unknown
 
 		for var in variables.keys():
 			self.__vars_regexes[var] = self.__var_regex(var)
 
 
 	def process_template(self, template: str) -> str:
-		parsed_vars = [m.group(1) for m in re.finditer(self.__general_regex, template)]
-
-		for parsed_var in parsed_vars:
-			if parsed_var not in self.variables.keys():
-				raise Exception('No such variable: ' + parsed_var + '.')
-
 		result = template
-		for parsed_var in parsed_vars:
-			result = self.process_variable(result, parsed_var, self.variables[parsed_var])
+		
+		if self.ignore_unknown:
+			for var in self.variables:
+				result = self.process_variable(result, var, self.variables[var])			
+		else:
+			parsed_vars = [m.group(1) for m in re.finditer(self.__general_regex, template)]
+
+			for parsed_var in parsed_vars:
+				if parsed_var in self.variables.keys():
+					result = self.process_variable(result, parsed_var, self.variables[parsed_var])
+				else:
+					raise Exception('No such variable: ' + parsed_var + '.')
 
 		return result
 

@@ -6,9 +6,9 @@ from typing import List
 morph = pymorphy2.MorphAnalyzer()
 
 
-def load_template() -> List[str]:
+def load_template(path: str) -> List[str]:
 	result: List[str]
-	with open('./templates/template_zvonov.txt', 'r', encoding='utf8') as file:
+	with open(path, 'r', encoding='utf8') as file:
 		result = file.readlines()
 
 	return result
@@ -50,7 +50,7 @@ def process_template(template: List[str], word: str) -> List[str]:
 
 
 def main() -> None:
-	print(''.join(process_template(load_template(), 'коммунизм')))
+	print(''.join(process_template(load_template('./templates/zvonov.txt'), 'коммунизм')))
 
 
 if __name__ == '__main__':

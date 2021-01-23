@@ -1,20 +1,24 @@
 import re
-from typing import Dict
+from typing import Dict, Literal
 from src.word_morpher import WordMorpher
 
 
 class TemplateEngine:
+	ANY_VAR_REGEX = r'([A-Z_-]+)'
+	
 	variables: Dict[str, str] = {}
 	ignore_unknown = False
 	
 	__morpher = WordMorpher()
 	__vars_regexes: Dict[str, str] = {}
-	__general_regex = r'\[[\ ]*([A-Z_-]+)[\ ]*[|]{0,1}[\ ]*(\w*)[\ ]*\]'
+	__general_regex: Literal = ''
 
 	
 	def __init__(self, variables: Dict[str, str], ignore_unknown: bool = False) -> None:
 		self.variables = { k.upper() : v for k, v in variables.items() }
 		self.ignore_unknown = ignore_unknown
+
+		self.__general_regex = self.__var_regex(self.ANY_VAR_REGEX)
 
 		for var in variables.keys():
 			self.__vars_regexes[var] = self.__var_regex(var)

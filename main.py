@@ -21,7 +21,7 @@ def main() -> None:
 	parser.add_argument('-v', '--variable', action='append', type=lambda kv: kv.split("="), dest='variables', 
 		help='Добавляет в список переменных значение. Может применяться несколько раз. Аргумент должен выглядеть как X=слово, где X - любое название вашей переменной')
 	parser.add_argument('-i', '--ignore-unknown', type=bool, required=False, nargs='?', const=True, default=False, metavar='ignore_unknown', 
-		help='This flag indicates whether to ignore unknown variables if True, or abort otherwise. The default is False.')
+		help='Этот флаг указывает: игнорировать ли неизвестные переменные в шаблоне (если True), или выбрасывать исключение в ином случае. По умолчанию False.')
 
 	args = parser.parse_args()
 

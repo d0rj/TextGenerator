@@ -9,7 +9,7 @@ class TemplateEngine:
 	
 	__morpher = WordMorpher()
 	__vars_regexes: Dict[str, str] = {}
-	__general_regex = r'([A-Z]+)\[(\w*)\]'
+	__general_regex = r'([A-Z_-]+)\[(\w*)\]'
 
 	
 	def __init__(self, variables: Dict[str, str], ignore_unknown: bool = False) -> None:

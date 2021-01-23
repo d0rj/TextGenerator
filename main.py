@@ -14,8 +14,6 @@ def load_template(path: str) -> List[str]:
 
 def main() -> None:
 	parser = argparse.ArgumentParser()
-	parser.add_argument('-X', '--X', type=str, default='коммунизм', metavar='X', 
-		help='Значение переменной слова X.')
 	parser.add_argument('-f', '--file', type=pathlib.Path, default='./templates/zvonov.txt', metavar='file', 
 		help='Входной файл с шаблоном.')
 	parser.add_argument('-v', '--variable', action='append', type=lambda kv: kv.split("="), dest='variables', 
